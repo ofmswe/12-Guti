@@ -11,6 +11,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.control.Alert;
 
 public class GameView {
 
@@ -44,6 +45,10 @@ public class GameView {
         topBar.setPadding(new Insets(12, 0, 10, 0));
         topBar.setStyle("-fx-background-color: #1e2a35;");
 
+        //rules button for v-2.0
+        Button rulesBtn = makeButton("Game Rules", "#2980b9");
+        rulesBtn.setOnAction(e -> showRulesPopup());
+
         // End-turn button
         endTurnBtn = makeButton("End Turn", "#e67e22");
         endTurnBtn.setVisible(false);
@@ -60,7 +65,8 @@ public class GameView {
 
         // Bottom bar
         BorderPane bottomBar = new BorderPane();
-        bottomBar.setLeft(endTurnBtn);
+        bottomBar.setLeft(rulesBtn);
+        bottomBar.setCenter(endTurnBtn);
         bottomBar.setRight(rightBox);
 
         bottomBar.setPadding(new Insets(10, 16, 10, 16));
@@ -150,6 +156,30 @@ public class GameView {
 
     // Update bottom controls
     private void updateBottomBar() {endTurnBtn.setVisible(session.isChainActive());}
+
+    //show rules v2.0
+    private void showRulesPopup() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("12-Guti - Game Rules");
+        alert.setContentText(
+                "Board:\n" +
+                "• The game is played on a 5×5 board with 25 positions.\n" +
+                "• Each player starts with 12 pieces.\n" +
+                "• Player 1 uses Red pieces.\n" +
+                "• Player 2 uses Blue pieces.\n\n" +
+
+                "Moves:\n" +
+                "• Walk – Move a piece to an adjacent empty position.\n" +
+                "• Jump – Jump over an opponent's piece to capture it.\n" +
+                "• Chain Jump – After a successful jump, if the same piece can make another jump, the player may continue jumping with that piece in the same turn.\n\n" +
+
+                "Winning Conditions:\n" +
+                "A player wins by:\n" +
+                "• Capturing all of the opponent's pieces, or\n" +
+                "• Blocking the opponent so that they have no legal moves remaining.\n"
+        );
+        alert.showAndWait();
+    }
 
     // Show game-over popup
     private void showGameOverPopup() {
